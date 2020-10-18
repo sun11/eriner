@@ -47,7 +47,7 @@ _prompt_eriner_status() {
   if (( EUID == 0 )) segment+=' %F{yellow}⚡'
   if (( $(jobs -l | wc -l) )) segment+=' %F{cyan}⚙'
   if (( RANGER_LEVEL )) segment+=' %F{cyan}r'
-  if [[ -n ${VIRTUAL_ENV} ]] segment+=" %F{cyan}${VIRTUAL_ENV:t}"
+  if [[ -n ${CONDA_DEFAULT_ENV} ]] segment+=" %F{cyan}${CONDA_DEFAULT_ENV:t}"
   if [[ -n ${SSH_TTY} ]] segment+=" %F{%(!.yellow.default)}%n@%m"
   if [[ -n ${segment} ]]; then
     _prompt_eriner_segment ${STATUS_COLOR} "${segment} "
@@ -58,7 +58,7 @@ _prompt_eriner_status() {
 _prompt_eriner_pwd() {
   local current_dir=${(%):-%~}
   if [[ ${current_dir} != '~' ]]; then
-    current_dir="${${(@j:/:M)${(@s:/:)current_dir:h}#?}%/}/${current_dir:t}"
+    current_dir="${${(@j:/:M)${(@s:/:)current_dir:h}}%/}/${current_dir:t}"
   fi
   _prompt_eriner_standout_segment ${PWD_COLOR} " ${current_dir} "
 }
@@ -78,10 +78,9 @@ _prompt_eriner_git() {
 }
 
 : ${STATUS_COLOR=black}
-: ${PWD_COLOR=cyan}
+: ${PWD_COLOR=blue}
 : ${CLEAN_COLOR=green}
 : ${DIRTY_COLOR=yellow}
-VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt nopromptbang prompt{cr,percent,sp,subst}
 
